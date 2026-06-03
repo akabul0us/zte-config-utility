@@ -15,10 +15,11 @@ KNOWN_KEYS = {
     "tHG@Ti&GVh@ql3XN": ["zxhn h267n"],
     # not sure, might be related to H108N
     "SDEwOE5WMi41Uk9T": ["TODO"],
+    "ZTE%FN$GponNJ025": ["ZXHN F670L1FXS"],
 }
 
 # deprecated
-KNOWN_MODELS = ["H268Q", "H298Q", "H188A", "H288A", "H267AV1_CZ"]
+KNOWN_MODELS = ["H268Q", "H298Q", "H188A", "H288A", "H267AV1_CZ", "F670L1FXS"]
 
 KNOWN_SIGNATURES = [
     "H188A",
@@ -29,6 +30,7 @@ KNOWN_SIGNATURES = [
     # "ZXHN H168N V3.5",
     # "ZXHN H298Q",
     # "ZXHN H268Q",
+    "ZXHN F670L1FXS"
 ]
 
 

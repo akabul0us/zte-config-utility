@@ -1,4 +1,5 @@
 # zte config utility
+### with support for ZXHN F670L1FXS, firmware V9.0.11P5N5E
 
 The core of the decoding work is taken from a [pastebin](https://pastebin.com/GGxbngtK) dump by 'Felis-Sapien'.
 
@@ -136,3 +137,36 @@ It makes a number of assumptions due to this. The encoder has not been heavily t
 ## Requirements
 
 The AES encryption relies on [pycryptodomex](https://pypi.org/project/pycryptodomex/).
+
+## ZXHN F670L1FXS
+
+Tested on INFINITUM/Telmex router using firmware V9.0.11P5N5E.
+
+Thanks to the information in [this thread](https://www.reddit.com/r/mexico/comments/1kh288x/router_telmex_zte_zxhn_f670l_modo_brige/) and [this additional decryption script](https://gist.github.com/zainarbani/723d1387bec9e1559de7a1029d08aa91), I was able to decode the `config.bin` file to a readable (and editable) XML file. However, I could not find any reliable information re: re-encrypting this file and uploading it to the device successfully -- in the aforementioned thread, OP simply suggests not to do that. But I like to live dangerously.
+
+The syntax for `decode670.py` has been altered from the original to bring it in line with `decode.py`. Assuming you downloaded `config.bin` to `$HOME/zte-config-utility/myconfigs/`, you would run something like:
+
+`~/zte-config-utility$ ./examples/decode670.py --serial ZTEG18493025 --mac a0:b3:f3:11:33:40 myconfigs/config.bin myconfigs/config.xml`
+
+which would result in this output:
+
+`Detected signature: ZXHN F670L1FXS
+Detected payload type 6
+MAC: a0:b3:f3:11:33:40 
+S/N: ZTEG18493025 
+
+Successfully decrypted!`
+
+The script `signature.py` has been updated to allow little-endian byte order as an option (-l), necessary with this device.
+
+`~/zte-config-utility$ ./examples/signature.py -l myconfigs/config.bin
+ZXHN F670L1FXS`
+
+The syntax to re-encode `config.xml` to a repacked .bin file, unfortunately, is somewhat less user-friendly. The existing function to extract the key/IV from the router MAC address and serial also makes `encode.py` default to incorrect options for signature, payload type, etc. To restore this functionality, I've added `print_key.sh`, which takes serial number and MAC address as positional arguments (or prompts for them if not passed) and outputs both the key AND the command that the user may simply copy and paste.
+
+`~/zte-config-utility$ ./examples/print_key.sh ZTEG83726942 "f8:4d:a0:62:b6:23"
+KEY: 83726942326b260a
+Command to encode config.bin for ZXHN F670L1FXS: 
+./encode.py --little-endian-header --include-header --key 83726942326b260a --iv 'ZTE%FN$GponNJ025' --signature "ZXHN F670L1FXS" INFILE.xml OUTFILE.bin`
+
+Some other changes include adding shebangs to a handful of files and adding known keys for this device model.

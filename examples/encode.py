@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Encode config.xml into config.bin"""
 
 import argparse

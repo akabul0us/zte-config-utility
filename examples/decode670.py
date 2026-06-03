@@ -162,7 +162,7 @@ def main():
                         help="Output file e.g. config.xml")
     parser.add_argument("--mac", type=str, default="",
                         help="Router MAC address")
-    parser.add_argument("--sn", type=str, default="",
+    parser.add_argument("--serial", type=str, default="",
                         help="Router serial number")
     args = parser.parse_args()
 
@@ -180,11 +180,11 @@ def main():
 
     matched = False
     if payload_type == 6:
-        if args.mac is None or args.sn is None:
+        if args.mac is None or args.serial is None:
             error("mac, sn cannot be null" % len(generated))
 
-        print("MAC: %s\nS/N: %s" % (args.mac, args.sn))
-        user_key = args.sn[4:] + zteUtil.mac_to_str(args.mac)
+        print("MAC: %s\nS/N: %s" % (args.mac, args.serial))
+        user_key = args.serial[4:] + zteUtil.mac_to_str(args.mac)
         decryptor = zteXcryptor()
         decryptor.set_key(user_key.encode(), ZTE_IV)
         infile.seek(start_pos)
